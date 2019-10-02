@@ -16,7 +16,6 @@ s = requests.Session()
 
 
 def notify(text):
-    print(text)
     bot = telegram.Bot(token=telegram_token)
     message = "🌩️🌪️🌀\n" + text
     bot.sendMessage(chat_id=telegram_chat_id, text=message)
@@ -32,7 +31,6 @@ for day in ["heute", "morgen", "uebermorgen"]:
         if text:
             notify(text)
         cache[day] = text
-    print(text)
 
 with open("cache.json", "w") as f:
     json.dump(cache, f)
