@@ -29,8 +29,8 @@ for day in ["heute", "morgen", "uebermorgen"]:
     warnings = [tag.get_text() for tag in soup.find_all("p", class_="warnung_text")]
     text = "\n".join(warnings)
     if day not in cache or text != cache[day]:
-        # if text:
-        notify(text)
+        if text:
+            notify(text)
         cache[day] = text
     print(text)
 
