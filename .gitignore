@@ -1,4 +1,5 @@
 config.py
 .idea
 cache.json
+*.yaml
 __pycache__/

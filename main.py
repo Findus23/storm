@@ -1,27 +1,32 @@
-import json
-
 import requests
 import telegram
+import yaml
 from bs4 import BeautifulSoup
 
-from config import telegram_token, telegram_chat_id
+from config import telegram_token
 
 try:
-    with open("cache.json") as f:
-        cache = json.load(f)
+    with open("cache.yaml") as f:
+        cache = yaml.safe_load(f)
 except FileNotFoundError:
     cache = {}
 
+with open("db.yaml") as f:
+    db = yaml.safe_load(f)
+
 s = requests.Session()
 
+pretty_daynames = {"heute": "Heute", "morgen": "Morgen", "uebermorgen": "Übermorgen"}
 
-def notify(text):
+
+def notify(text, prettyday):
     bot = telegram.Bot(token=telegram_token)
-    message = "🌩️🌪️🌀\n" + text
-    bot.sendMessage(chat_id=telegram_chat_id, text=message)
+    message = f"🌩️🌪️🌀 ({prettyday})\n" + text
+    for chat_id in db["subscribed"].keys():
+        bot.sendMessage(chat_id=chat_id, text=message)
 
 
-for day in ["heute", "morgen", "uebermorgen"]:
+for day in pretty_daynames.keys():
     r = s.get(f'https://warnungen.zamg.at/html/de/{day}/wind/at/wien/wien_waehring/wien_waehring/')
 
     soup = BeautifulSoup(r.text, 'html.parser')
@@ -29,8 +34,8 @@ for day in ["heute", "morgen", "uebermorgen"]:
     text = "\n".join(warnings)
     if day not in cache or text != cache[day]:
         if text:
-            notify(text)
+            notify(text, pretty_daynames[day])
         cache[day] = text
 
-with open("cache.json", "w") as f:
-    json.dump(cache, f)
+with open("cache.yaml", "w") as f:
+    yaml.safe_dump(cache, f)

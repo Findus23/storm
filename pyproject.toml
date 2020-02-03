@@ -8,6 +8,8 @@ authors = ["Lukas Winkler <git@lw1.at>"]
 python = "^3.8"
 requests = "^2.22.0"
 python-telegram-bot = "^12.2.0"
+beautifulsoup4 = "^4.8.2"
+pyyaml = "^5.3"
 
 [tool.poetry.dev-dependencies]
 
