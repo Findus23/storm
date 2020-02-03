@@ -37,6 +37,10 @@ for update in bot.get_updates(offset=db["last_update"] + 1):
         else:
             bot.sendMessage(chat_id=chat.id,
                             text="Du bekommst bereits keine Nachrichten. Verwende /subscribe um sie wieder zu bekommen.")
+    elif "/start" in text or "/help" in text:
+        bot.sendMessage(chat_id=chat.id,
+                        text="Verwende /subscribe um regelmäßige Nachrichten zu bekommen. Mit /unsubscribe kannst du dich wieder abmelden. "
+                             "Es kann bis zu 5 Minuten dauern, bis eine Bestätigung kommt.")
 
     db["last_update"] = update.update_id
 
